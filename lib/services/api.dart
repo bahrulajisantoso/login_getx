@@ -8,7 +8,8 @@ class Api {
       final response = await dio.get('https://dummyjson.com/users');
 
       if (response.data != null) {
-        debugPrint(response.data.toString());
+        // debugPrint(response.data.toString());
+        return response.data;
       }
     } catch (e) {
       debugPrint(e.toString());

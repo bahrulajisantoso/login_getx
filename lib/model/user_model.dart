@@ -1,7 +1,12 @@
 import 'dart:convert';
 
-List<UserModel> userFromJson(String str) => List<UserModel>.from(
-    json.decode(str)['users'].map((x) => UserModel.fromJson(x)));
+// List<UserModel> userFromJson(String str) => List<UserModel>.from(
+//     json.decode(str)['users'].map((x) => UserModel.fromJson(x)));
+
+List<UserModel> userFromJson(Map<String, dynamic> json) {
+  final List<dynamic> usersJson = json['users'];
+  return usersJson.map((x) => UserModel.fromJson(x)).toList();
+}
 
 class UserModel {
   final int id;
