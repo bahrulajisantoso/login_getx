@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:user_login/login.dart';
+import 'package:user_login/services/api.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  Api api = Api();
+  var data = await api.user();
+  debugPrint(data.toString());
   runApp(const MyApp());
 }
 
