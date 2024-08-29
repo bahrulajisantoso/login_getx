@@ -8,21 +8,36 @@ class UserController extends GetxController {
 
   var isLoading = false.obs;
 
-  Future<void> user() async {
+  Future<void> getUser(String email, String password) async {
     isLoading.value = true;
     try {
       final data = await _apiService.user();
-      final List user = userFromJson(data);
 
-      debugPrint(user.toString());
-
-      // debugPrint(data.toString());
-      // Get.offAllNamed('/home');
+      if (_login(email, password, data) == true) {
+        // debugPrint("login sukses");
+        Get.snackbar('Error', 'Login success',
+            snackPosition: SnackPosition.BOTTOM);
+        Get.offAllNamed('/home', arguments: data);
+      } else {
+        // debugPrint("login gagal");
+        Get.snackbar('Error', 'Login failed',
+            snackPosition: SnackPosition.BOTTOM);
+      }
     } catch (e) {
-      // Get.snackbar('Error', e.toString());
-      debugPrint('Error');
+      Get.snackbar('Error', e.toString());
+      debugPrint(e.toString());
     } finally {
       isLoading.value = false;
+    }
+  }
+
+  _login(String email, String password, List<UserModel> users) {
+    for (var user in users) {
+      if (user.email == email && user.password == password) {
+        return true;
+      } else {
+        return false;
+      }
     }
   }
 }

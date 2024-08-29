@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 // List<UserModel> userFromJson(String str) => List<UserModel>.from(
 //     json.decode(str)['users'].map((x) => UserModel.fromJson(x)));
 
@@ -9,11 +7,11 @@ List<UserModel> userFromJson(Map<String, dynamic> json) {
 }
 
 class UserModel {
-  final int id;
+  final String id;
   final String firstName;
   final String lastName;
   final String maidenName;
-  final int age;
+  final String age;
   final String gender;
   final String email;
   final String phone;
@@ -22,8 +20,8 @@ class UserModel {
   final String birthDate;
   final String image;
   final String bloodGroup;
-  final double height;
-  final double weight;
+  final String height;
+  final String weight;
   final String eyeColor;
 
   UserModel({
@@ -47,11 +45,11 @@ class UserModel {
 
   factory UserModel.fromJson(Map<String, dynamic> json) {
     return UserModel(
-      id: json['id'],
+      id: json['id'].toString(),
       firstName: json['firstName'],
       lastName: json['lastName'],
       maidenName: json['maidenName'],
-      age: json['age'],
+      age: json['age'].toString(),
       gender: json['gender'],
       email: json['email'],
       phone: json['phone'],
@@ -60,18 +58,9 @@ class UserModel {
       birthDate: json['birthDate'],
       image: json['image'],
       bloodGroup: json['bloodGroup'],
-      height: json['height'],
-      weight: json['weight'],
+      height: json['height'].toString(),
+      weight: json['weight'].toString(),
       eyeColor: json['eyeColor'],
     );
   }
-}
-
-bool login(String username, String password, List<UserModel> users) {
-  for (var user in users) {
-    if (user.username == username && user.password == password) {
-      return true;
-    }
-  }
-  return false;
 }
