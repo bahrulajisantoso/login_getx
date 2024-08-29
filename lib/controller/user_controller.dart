@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:user_login/model/user_model.dart';
 import 'package:user_login/services/api.dart';
+import 'package:user_login/services/session.dart';
 
 class UserController extends GetxController {
   final Api _apiService = Api();
@@ -12,16 +13,23 @@ class UserController extends GetxController {
     isLoading.value = true;
     try {
       final data = await _apiService.user();
+      final session = Session();
 
-      if (_login(email, password, data) == true) {
-        // debugPrint("login sukses");
-        Get.snackbar('Error', 'Login success',
-            snackPosition: SnackPosition.BOTTOM);
-        Get.offAllNamed('/home', arguments: data);
+      final emailSession = await session.getEmail();
+      final isLogin = await session.getIsLogin();
+
+      if (emailSession == "" && isLogin == false) {
+        if (_login(email, password, data) == true) {
+          Get.snackbar('Success', 'Login success',
+              snackPosition: SnackPosition.BOTTOM);
+          await session.session(email, true);
+          Get.offAllNamed('/home', arguments: data);
+        } else {
+          Get.snackbar('Error', 'Login failed',
+              snackPosition: SnackPosition.BOTTOM);
+        }
       } else {
-        // debugPrint("login gagal");
-        Get.snackbar('Error', 'Login failed',
-            snackPosition: SnackPosition.BOTTOM);
+        Get.offAllNamed('/home', arguments: data);
       }
     } catch (e) {
       Get.snackbar('Error', e.toString());
@@ -39,5 +47,6 @@ class UserController extends GetxController {
         return false;
       }
     }
+    return false;
   }
 }

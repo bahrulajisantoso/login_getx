@@ -1,15 +1,41 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:user_login/model/user_model.dart';
+import 'package:user_login/services/session.dart';
 
 class Home extends StatelessWidget {
   const Home({Key? key}) : super(key: key);
 
+  Future<void> _logout() async {
+    final session = Session();
+    await session.clearSession();
+    Get.offAllNamed('/login');
+  }
+
   @override
   Widget build(BuildContext context) {
-    final List<UserModel> users = Get.arguments;
+    final List<UserModel>? users = Get.arguments as List<UserModel>?;
+    final session = Session();
+
+    if (users == null || users.isEmpty) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        Get.offAllNamed('/login');
+      });
+      return const Scaffold(
+        body: Center(child: CircularProgressIndicator()),
+      );
+    }
 
     return Scaffold(
+      appBar: AppBar(
+        title: const Text('Home'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.logout),
+            onPressed: _logout,
+          ),
+        ],
+      ),
       body: Center(
         child: Container(
           constraints: const BoxConstraints(maxWidth: 400),
@@ -22,8 +48,9 @@ class Home extends StatelessWidget {
                 margin:
                     const EdgeInsets.symmetric(horizontal: 16, vertical: 8.0),
                 decoration: BoxDecoration(
-                    border: Border.all(color: const Color(0xFFE0E0E0)),
-                    borderRadius: BorderRadius.circular(8.0)),
+                  border: Border.all(color: const Color(0xFFE0E0E0)),
+                  borderRadius: BorderRadius.circular(8.0),
+                ),
                 padding: const EdgeInsets.all(8),
                 child: Row(
                   children: [
@@ -55,8 +82,11 @@ class Home extends StatelessWidget {
                               style: Theme.of(context).textTheme.bodyMedium),
                           Text('gender : ${item.gender}',
                               style: Theme.of(context).textTheme.bodyMedium),
-                          Text('email : ${item.email}',
-                              style: Theme.of(context).textTheme.bodyMedium),
+                          Text(
+                            'email : ${item.email}',
+                            style: Theme.of(context).textTheme.bodyMedium,
+                            maxLines: 2,
+                          ),
                         ],
                       ),
                     ),
