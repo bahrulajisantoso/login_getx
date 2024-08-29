@@ -15,7 +15,6 @@ class Home extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final List<UserModel>? users = Get.arguments as List<UserModel>?;
-    final session = Session();
 
     if (users == null || users.isEmpty) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
